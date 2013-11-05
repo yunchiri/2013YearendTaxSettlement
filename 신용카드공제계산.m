@@ -37,7 +37,7 @@ long	finalDeductionAmt						//최종 공제금액 21
 traditionalMarketUseAmtOfDeductionAmt = traditionalMarketUseAmtOfDeductionAmt* 0.3	 
 
 //12 대중교통 이용분 공제액 
-publicTransportUseAmtOfDeductionAmt	= publicTransportUseAmt * 0.3		 
+publicTransportUseAmtOfDeductionAmt = publicTransportUseAmt * 0.3		 
 
 //13 직불-선불카드, 현금영수증 사용분 공제액 
 debitAndPrepaidCardAndCashReceiptUsedAmtOfDeductionAmt = ( cashReceiptUsedAmt + debitAndPrepaidCardUsedAmt ) * 0.3 
