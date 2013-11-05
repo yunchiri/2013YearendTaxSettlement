@@ -34,29 +34,29 @@ long	finalDeductionAmt						//최종 공제금액 21
 
 
 //11 전통시장 사용분 공제액 
-traditionalMarketUseAmtOfDeductionAmt	=	traditionalMarketUseAmtOfDeductionAmt* 0.3	 
+traditionalMarketUseAmtOfDeductionAmt = traditionalMarketUseAmtOfDeductionAmt* 0.3	 
 
 //12 대중교통 이용분 공제액 
-publicTransportUseAmtOfDeductionAmt	=	publicTransportUseAmt * 0.3		 
+publicTransportUseAmtOfDeductionAmt	= publicTransportUseAmt * 0.3		 
 
 //13 직불-선불카드, 현금영수증 사용분 공제액 
-debitAndPrepaidCardAndCashReceiptUsedAmtOfDeductionAmt	=	( cashReceiptUsedAmt + debitAndPrepaidCardUsedAmt ) * 0.3 
+debitAndPrepaidCardAndCashReceiptUsedAmtOfDeductionAmt = ( cashReceiptUsedAmt + debitAndPrepaidCardUsedAmt ) * 0.3 
 
 //14 신용카드 사용분 공제액
-creditCardAmtUsedAmtOfDeductionAmt	=	creditCardAmtUsedAmt * 0.15 
+creditCardAmtUsedAmtOfDeductionAmt = creditCardAmtUsedAmt * 0.15 
 
 //15 공제제외금액 계산		deductionExclusive
 //15-1 총급여
 totalPayRoll = getDatabase('총급여')
 
 //15-2 최저사용금액 
-minUsedAmt	=	totalPayRoll * 0.25 
+minUsedAmt = totalPayRoll * 0.25 
 
 //15-3 공제제외금액
 If ( minUsedAmt <=  creditCardAmtUsedAmt){
-	deductionExclusiveAmt	=	minUsedAmt * 0.15 
+	deductionExclusiveAmt = minUsedAmt * 0.15 
 }else{
-	deductionExclusiveAmt	=	creditCardAmtUsedAmt * 0.15 + ( minUsedAmt - creditCardAmtUsedAmt )  * 0.3 
+	deductionExclusiveAmt = creditCardAmtUsedAmt * 0.15 + ( minUsedAmt - creditCardAmtUsedAmt ) * 0.3 
 }
 
 //16 공제가능금액 ( 11 + 12 + 13 + 14  -(15-3))
@@ -70,14 +70,14 @@ deductionLimitAmt = min( 3000000, totalPayRollOf20percent )
 
 //18 일반 공제금액
 
-generalDeductionAmt	=	min(deductionAbleAmt	,	deductionLimitAmt)
+generalDeductionAmt	= min(deductionAbleAmt , deductionLimitAmt)
 
 //19 전통시장 추가 공제금액
 long minAmt16minus17 //16-17
 minAmt16minus17 = deductionAbleAmt  - deductionLimitAmt
 
 If (minAmt16minus17 < 0 ){
-	minAmt16minus17 = 0 ;=
+	minAmt16minus17 = 0 
 }
 
 tradtionalMarketAdditionalDeducionAmt = min(1000000,min( minAmt16minus17 , traditionalMarketUseAmtOfDeductionAmt ))
@@ -91,7 +91,7 @@ if ( minAmt16minus17minus19 < 0){
 	minAmt16minus17minus19 = 0
 }
 
-publicTransportAdditionalDeducionAmt	=	min(1000000,min(minAmt16minus17minus19	,	publicTransportUseAmtOfDeductionAmt))
+publicTransportAdditionalDeducionAmt = min(1000000,min(minAmt16minus17minus19 , publicTransportUseAmtOfDeductionAmt))
 
 //21 최종 공제금액
 finalDeductionAmt = generalDeductionAmt + tradtionalMarketAdditionalDeducionAmt + publicTransportAdditionalDeducionAmt
