@@ -85,7 +85,7 @@ if ( inputTotalSum == 0 ) {
 	calculatedHouseLongtermLoanAmt30Over = 0 
 	calculatedHouseFixedInterestRateNonDeferredRepaymentLoan = 0
 	calculatedHouseEtcLoan = 0
-	return;
+	return  0;
 }
 
 //한도 계산 
@@ -114,7 +114,7 @@ if ( houseRentLoanPrincipalRepaymentAmt_LoanOrganization > 0 ){
 		calculatedHouseLongtermLoanAmt30Over = 0 
 		calculatedHouseFixedInterestRateNonDeferredRepaymentLoan = 0
 		calculatedHouseEtcLoan = 0
-		return;
+		return maxLimitAmt;
 	}
 	calculatedSumAmt = calculatedHouseRentLoanPrincipalRepaymentAmtLoanOrganization
 }
@@ -136,7 +136,7 @@ if( houseRentLoanPrincipalRepaymentAmt_Liver > 0 ){
 			calculatedHouseFixedInterestRateNonDeferredRepaymentLoan = 0
 			calculatedHouseEtcLoan = 0
 
-			return;
+			return maxLimitAmt;
 	}
 	calculatedSumAmt = calculatedSumAmt + calculatedHouseRentLoanPrincipalRepaymentAmtLiver
 }
@@ -161,7 +161,7 @@ if ( houseMonthlyRentAmt > 0 )
 			calculatedHouseFixedInterestRateNonDeferredRepaymentLoan = 0
 			calculatedHouseEtcLoan = 0
 
-			return;
+			return maxLimitAmt;
 		}
 		calculatedSumAmt = calculatedSumAmt + calculatedHouseMonthlyRentAmt
 	}
@@ -186,7 +186,7 @@ if( houseOfferSavings > 0){
 		calculatedHouseFixedInterestRateNonDeferredRepaymentLoan = 0
 		calculatedHouseEtcLoan = 0
 
-		return;
+		return maxLimitAmt;
 	}
 	calculatedSumAmt =  calculatedSumAmt + calculatedhouseOfferSavings
 }
@@ -209,7 +209,7 @@ if( houseOfferTotalSavings > 0){
 		calculatedHouseFixedInterestRateNonDeferredRepaymentLoan = 0
 		calculatedHouseEtcLoan = 0
 
-		return;
+		return maxLimitAmt;
 	}
 	calculatedSumAmt =  calculatedSumAmt + calculatedhouseOfferTotalSavings
 }
@@ -233,7 +233,7 @@ if( houseWorkersSave > 0){
 		calculatedHouseFixedInterestRateNonDeferredRepaymentLoan = 0
 		calculatedHouseEtcLoan = 0
 
-		return;
+		return maxLimitAmt;
 	}
 	calculatedSumAmt =  calculatedSumAmt + calculatedhouseWorkersSave
 }
@@ -257,7 +257,7 @@ if( houseLongtermLoanAmt15Under > 0){
 		calculatedHouseFixedInterestRateNonDeferredRepaymentLoan = 0
 		calculatedHouseEtcLoan = 0
 
-		return;
+		return maxLimitAmt;
 	}
 	calculatedSumAmt =  calculatedSumAmt + calculatedHouseLongtermLoanAmt14Under
 }
@@ -281,7 +281,7 @@ if( houseLongtermLoanAmt15to29  > 0 ){
 		calculatedHouseFixedInterestRateNonDeferredRepaymentLoan = 0
 		calculatedHouseEtcLoan = 0
 
-		return
+		return maxLimitAmt ;
 	} 
 	calculatedSumAmt = calculatedSumAmt + calculatedHouseLongtermLoanAmt15to29
 }
@@ -305,7 +305,7 @@ if( houseLongtermLoanAmt30Over  > 0 ){
 		calculatedHouseFixedInterestRateNonDeferredRepaymentLoan = 0
 		calculatedHouseEtcLoan = 0
 
-		return
+		return maxLimitAmt
 	} 
 	calculatedSumAmt = calculatedSumAmt + calculatedHouseLongtermLoanAmt30Over
 }
@@ -329,7 +329,7 @@ if( houseFixedInterestRateNonDeferredRepaymentLoan  > 0 ){
 		calculatedHouseFixedInterestRateNonDeferredRepaymentLoan = maxLimitAmt - calculatedHouseFixedInterestRateNonDeferredRepaymentLoan
 		calculatedHouseEtcLoan = 0
 
-		return
+		return maxLimitAmt
 	} 
 	calculatedSumAmt = calculatedSumAmt + calculatedHouseFixedInterestRateNonDeferredRepaymentLoan
 }
@@ -354,7 +354,7 @@ if( houseEtcLoan  > 0 ){
 		// calculatedHouseFixedInterestRateNonDeferredRepaymentLoan = 0
 		calculatedHouseEtcLoan = maxLimitAmt -  calculatedHouseEtcLoan
 
-		return
+		return maxLimitAmt
 	} 
 	calculatedSumAmt = calculatedSumAmt + calculatedHouseEtcLoan
 }
