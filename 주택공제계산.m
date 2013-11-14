@@ -74,7 +74,7 @@ maxLimitAmt = 3000000
 
 //1. check sum(all) == 0 then return
 long inputTotalSum ;
-inputTotalSum  = houseRentLoanPrincipalRepaymentAmt_LoanOrganization + houseRentLoanPrincipalRepaymentAmt_Liver + 	 houseMonthlyRentAmt + houseLongtermLoanAmtUnder14 + houseLongtermLoanAmtUnder15to29 + houseLongtermLoanAmtOver30 + houseFixedInterestRateNonDeferredRepaymentLoan + houseEtcLoan 
+inputTotalSum  = houseRentLoanPrincipalRepaymentAmt_LoanOrganization + houseRentLoanPrincipalRepaymentAmt_Liver + 	 houseMonthlyRentAmt + houseLongtermLoanAmt15Under + houseLongtermLoanAmt15to29 + houseLongtermLoanAmt30Over + houseFixedInterestRateNonDeferredRepaymentLoan + houseEtcLoan + houseOfferSavings + houseOfferTotalSavings + houseOfferLongtermSavings + houseWorkersSave
 if ( inputTotalSum == 0 ) {
 	calculatedHouseRentLoanPrincipalRepaymentAmtLoanOrganization = 0
 	calculatedHouseRentLoanPrincipalRepaymentAmtLiver = 0
@@ -239,9 +239,9 @@ if( houseWorkersSave > 0 && calculatedSumAmt < maxLimitAmt ){
 
 //(2011년 이전 차입분) 장기주택저당차입금이자상환액_15년미만 한도계산 
 if( houseLongtermLoanAmt15Under > 0 && calculatedSumAmt < maxLimitAmt ){
-	calculatedHouseLongtermLoanAmt14Under = houseLongtermLoanAmt15Under
+	calculatedHouseLongtermLoanAmt15Under = houseLongtermLoanAmt15Under
 
-	if ( calculatedSumAmt + calculatedHouseLongtermLoanAmt14Under >= maxLimitAmt)
+	if ( calculatedSumAmt + calculatedHouseLongtermLoanAmt15Under >= maxLimitAmt)
 	{
 		calculatedHouseLongtermLoanAmt15Under = maxLimitAmt - calculatedSumAmt
 		calculatedHouseLongtermLoanAmt15to29 = 0
@@ -249,7 +249,7 @@ if( houseLongtermLoanAmt15Under > 0 && calculatedSumAmt < maxLimitAmt ){
 		calculatedHouseFixedInterestRateNonDeferredRepaymentLoan = 0
 		calculatedHouseEtcLoan = 0
 	}
-	calculatedSumAmt =  calculatedSumAmt + calculatedHouseLongtermLoanAmt14Under
+	calculatedSumAmt =  calculatedSumAmt + calculatedHouseLongtermLoanAmt15Under
 }
 
 //(2011년 이전 차입분) 장기주택저당차입금이자상환액_15년~29년 한도계산 
@@ -258,7 +258,7 @@ if( houseLongtermLoanAmt15to29  > 0  && calculatedSumAmt < maxLimitAmt ){
 	calculatedHouseLongtermLoanAmt15to29 = houseLongtermLoanAmt15to29
 	if ( calculatedSumAmt +  calculatedHouseLongtermLoanAmt15to29 >= maxLimitAmt )
 	{
-		calculatedHouseLongtermLoanAmt15to29 = maxLimitAmt -  houseLongtermLoanAmt15to29
+		calculatedHouseLongtermLoanAmt15to29 = maxLimitAmt -  calculatedSumAmt
 		calculatedHouseLongtermLoanAmt30Over = 0 
 		calculatedHouseFixedInterestRateNonDeferredRepaymentLoan = 0
 		calculatedHouseEtcLoan = 0
@@ -272,7 +272,7 @@ if( houseLongtermLoanAmt30Over  > 0 && calculatedSumAmt < maxLimitAmt  ){
 	calculatedHouseLongtermLoanAmt30Over = houseLongtermLoanAmt30Over
 	if ( calculatedSumAmt +  calculatedHouseLongtermLoanAmt30Over >= maxLimitAmt )
 	{
-		calculatedHouseLongtermLoanAmt30Over = maxLimitAmt -  calculatedHouseLongtermLoanAmt30Over
+		calculatedHouseLongtermLoanAmt30Over = maxLimitAmt -  calculatedSumAmt
 		calculatedHouseFixedInterestRateNonDeferredRepaymentLoan = 0
 		calculatedHouseEtcLoan = 0
 	} 
@@ -285,7 +285,7 @@ if( houseFixedInterestRateNonDeferredRepaymentLoan  > 0 && calculatedSumAmt < ma
 	calculatedHouseFixedInterestRateNonDeferredRepaymentLoan = houseFixedInterestRateNonDeferredRepaymentLoan
 	if ( calculatedSumAmt +  calculatedHouseFixedInterestRateNonDeferredRepaymentLoan >= maxLimitAmt )
 	{
-		calculatedHouseFixedInterestRateNonDeferredRepaymentLoan = maxLimitAmt - calculatedHouseFixedInterestRateNonDeferredRepaymentLoan
+		calculatedHouseFixedInterestRateNonDeferredRepaymentLoan = maxLimitAmt - calculatedSumAmt
 		calculatedHouseEtcLoan = 0		
 	} 
 	calculatedSumAmt = calculatedSumAmt + calculatedHouseFixedInterestRateNonDeferredRepaymentLoan
