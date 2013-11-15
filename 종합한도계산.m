@@ -17,6 +17,9 @@ long totalIncomeDeduction
 long specialDeductionTotalLimitExcessAmt
 maxLimit = 25000000
 
+//mapping
+
+
 totalIncomeDeduction = 
 guaranteedInsurance +
 medicalExpenseDeduction +

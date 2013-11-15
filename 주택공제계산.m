@@ -92,8 +92,8 @@ if ( inputTotalSum == 0 ) {
 if ( houseLongtermLoanAmt15Under > 0  ) maxLimitAmt = max( maxLimitAmt , limit6000000)
 if ( houseLongtermLoanAmt15to29 > 0 ) maxLimitAmt =  max ( maxLimitAmt, limit10000000)
 if ( houseLongtermLoanAmt30Over > 0 ) maxLimitAmt = max ( maxLimitAmt, limit15000000)
-if ( houseFixedInterestRateNonDeferredRepaymentLoan > 0 ) maxLimitAmt = max ( maxLimitAmt, limit5000000)
-if ( houseEtcLoan > 0 ) maxLimitAmt = max ( maxLimitAmt, limit15000000)
+if ( houseFixedInterestRateNonDeferredRepaymentLoan > 0 ) maxLimitAmt = max ( maxLimitAmt, limit15000000)
+if ( houseEtcLoan > 0 ) maxLimitAmt = max ( maxLimitAmt, limit5000000)
 
 
 
