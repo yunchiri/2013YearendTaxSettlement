@@ -67,7 +67,22 @@ limit5000000 = 5000000
 limit3000000 = 3000000
 limit480000 = 480000
 maxLimitAmt = 3000000
-//매핑 
+
+//변수 init
+calculatedHouseRentLoanPrincipalRepaymentAmtLoanOrganization = 0
+calculatedHouseRentLoanPrincipalRepaymentAmtLiver = 0
+calculatedHouseMonthlyRentAmt = 0
+calculatedHouseOfferSavings = 0
+calculatedHouseOfferTotalSavings = 0
+calculatedHouseWorkersSave = 0
+calculatedHouseLongtermLoanAmt15Under = 0
+calculatedHouseLongtermLoanAmt15to29 = 0
+calculatedHouseLongtermLoanAmt30Over = 0 
+calculatedHouseFixedInterestRateNonDeferredRepaymentLoan = 0
+calculatedHouseEtcLoan = 0
+
+
+//DB 값 매핑 
 
 
 //1. check sum(all) == 0 then return
@@ -99,7 +114,7 @@ if ( houseEtcLoan > 0 ) maxLimitAmt = max ( maxLimitAmt, limit5000000)
 
 //주택임차차입금 원리금 상환액 대출기간 한도 계산
 if ( houseRentLoanPrincipalRepaymentAmt_LoanOrganization > 0 && calculatedSumAmt < maxLimitAmt){
-	calculatedHouseRentLoanPrincipalRepaymentAmtLoanOrganization = truncate( houseRentLoanPrincipalRepaymentAmt_LoanOrganization * 0.4 ,0)
+	calculatedHouseRentLoanPrincipalRepaymentAmtLoanOrganization = min( truncate( houseRentLoanPrincipalRepaymentAmt_LoanOrganization * 0.4 ,0) , limit3000000)
 
 	
 	if ( calculatedHouseRentLoanPrincipalRepaymentAmtLoanOrganization >= maxLimitAmt ) {
@@ -120,10 +135,13 @@ if ( houseRentLoanPrincipalRepaymentAmt_LoanOrganization > 0 && calculatedSumAmt
 }
 
 //주택임차차입금 원리금 상환액 거주자 한도 계산
-if( houseRentLoanPrincipalRepaymentAmt_Liver > 0 && calculatedSumAmt < maxLimitAmt){
-	calculatedHouseRentLoanPrincipalRepaymentAmtLiver	= truncate(	houseRentLoanPrincipalRepaymentAmt_Liver * 0.4 ,0)
+if( houseRentLoanPrincipalRepaymentAmt_Liver > 0 && calculatedSumAmt < maxLimitAmt)
+{
+	if ( totalSalary <= 50000000)
+	{
+		calculatedHouseRentLoanPrincipalRepaymentAmtLiver	= min( truncate(	houseRentLoanPrincipalRepaymentAmt_Liver * 0.4 ,0) , limit3000000)
 
-	if ( calculatedSumAmt + calculatedHouseRentLoanPrincipalRepaymentAmtLiver >= maxLimitAmt ){
+		if ( calculatedSumAmt + calculatedHouseRentLoanPrincipalRepaymentAmtLiver >= maxLimitAmt ){
 			calculatedHouseRentLoanPrincipalRepaymentAmtLiver = maxLimitAmt - calculatedSumAmt
 			calculatedHouseMonthlyRentAmt = 0
 			calculatedHouseOfferSavings = 0
@@ -136,6 +154,8 @@ if( houseRentLoanPrincipalRepaymentAmt_Liver > 0 && calculatedSumAmt < maxLimitA
 			calculatedHouseEtcLoan = 0
 	}
 	calculatedSumAmt = calculatedSumAmt + calculatedHouseRentLoanPrincipalRepaymentAmtLiver
+
+	}
 }
 
 //월세한도 계산
@@ -143,7 +163,7 @@ if ( houseMonthlyRentAmt > 0 && calculatedSumAmt < maxLimitAmt)
 {
 	if (totalSalary <= 50000000)
 	{
-		calculatedHouseMonthlyRentAmt	= truncate(	houseMonthlyRentAmt* 0.5 ,0)
+		calculatedHouseMonthlyRentAmt	= min(truncate(	houseMonthlyRentAmt* 0.5 ,0) , limit3000000)
 
 		if (calculatedSumAmt + calculatedHouseMonthlyRentAmt >= maxLimitAmt) {
 			calculatedHouseMonthlyRentAmt = maxLimitAmt - calculatedSumAmt 
@@ -216,7 +236,7 @@ if( houseWorkersSave > 0 && calculatedSumAmt < maxLimitAmt ){
 
 //(2011년 이전 차입분) 장기주택저당차입금이자상환액_15년미만 한도계산 
 if( houseLongtermLoanAmt15Under > 0 && calculatedSumAmt < maxLimitAmt ){
-	calculatedHouseLongtermLoanAmt15Under = houseLongtermLoanAmt15Under
+	calculatedHouseLongtermLoanAmt15Under = min(houseLongtermLoanAmt15Under , limit6000000)
 
 	if ( calculatedSumAmt + calculatedHouseLongtermLoanAmt15Under >= maxLimitAmt)
 	{
@@ -232,7 +252,7 @@ if( houseLongtermLoanAmt15Under > 0 && calculatedSumAmt < maxLimitAmt ){
 //(2011년 이전 차입분) 장기주택저당차입금이자상환액_15년~29년 한도계산 
 if( houseLongtermLoanAmt15to29  > 0  && calculatedSumAmt < maxLimitAmt ){
 
-	calculatedHouseLongtermLoanAmt15to29 = houseLongtermLoanAmt15to29
+	calculatedHouseLongtermLoanAmt15to29 = min(houseLongtermLoanAmt15to29, limit10000000)
 	if ( calculatedSumAmt +  calculatedHouseLongtermLoanAmt15to29 >= maxLimitAmt )
 	{
 		calculatedHouseLongtermLoanAmt15to29 = maxLimitAmt -  calculatedSumAmt
@@ -246,7 +266,7 @@ if( houseLongtermLoanAmt15to29  > 0  && calculatedSumAmt < maxLimitAmt ){
 //(2011년 이전 차입분) 장기주택저당차입금이자상환액_30년이상 한도계산
 if( houseLongtermLoanAmt30Over  > 0 && calculatedSumAmt < maxLimitAmt  ){
 
-	calculatedHouseLongtermLoanAmt30Over = houseLongtermLoanAmt30Over
+	calculatedHouseLongtermLoanAmt30Over = min(houseLongtermLoanAmt30Over , limit15000000)
 	if ( calculatedSumAmt +  calculatedHouseLongtermLoanAmt30Over >= maxLimitAmt )
 	{
 		calculatedHouseLongtermLoanAmt30Over = maxLimitAmt -  calculatedSumAmt
@@ -259,7 +279,7 @@ if( houseLongtermLoanAmt30Over  > 0 && calculatedSumAmt < maxLimitAmt  ){
 //(2012년 이후 차입분 15년 이상) 고정금리비거치식 상환대출
 if( houseFixedInterestRateNonDeferredRepaymentLoan  > 0 && calculatedSumAmt < maxLimitAmt  ){
 
-	calculatedHouseFixedInterestRateNonDeferredRepaymentLoan = houseFixedInterestRateNonDeferredRepaymentLoan
+	calculatedHouseFixedInterestRateNonDeferredRepaymentLoan = min(houseFixedInterestRateNonDeferredRepaymentLoan , limit15000000)
 	if ( calculatedSumAmt +  calculatedHouseFixedInterestRateNonDeferredRepaymentLoan >= maxLimitAmt )
 	{
 		calculatedHouseFixedInterestRateNonDeferredRepaymentLoan = maxLimitAmt - calculatedSumAmt
@@ -272,7 +292,7 @@ if( houseFixedInterestRateNonDeferredRepaymentLoan  > 0 && calculatedSumAmt < ma
 //(2012년 이후 차입분 15년 이상) 기타대출
 if( houseEtcLoan  > 0  && calculatedSumAmt < maxLimitAmt ){
 
-	calculatedHouseEtcLoan = houseEtcLoan
+	calculatedHouseEtcLoan = min (houseEtcLoan , limit5000000)
 	if ( calculatedSumAmt +  calculatedHouseEtcLoan >= maxLimitAmt )
 	{
 		calculatedHouseEtcLoan = maxLimitAmt -  calculatedHouseEtcLoan
