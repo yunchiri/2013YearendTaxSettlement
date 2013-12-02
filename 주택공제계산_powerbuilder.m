@@ -2,7 +2,7 @@
 /*
 create : hernardo@gmail.com
 date : 2013-11-7
-2012년 버전임.
+
 */
 
 /*
@@ -32,7 +32,7 @@ decimal houseEtcLoan //(2012년 이후 차입분 15년 이상) 기타대출
 
 decimal houseOfferSavings//청약저축
 decimal houseOfferTotalSavings//주택청약종합저축
-decimal houseOfferLongtermSavings //장기주택마련저축 
+//decimal houseOfferLongtermSavings //장기주택마련저축 
 decimal houseWorkersSave//근로자주택마련저축
 
 //한도 계산 후 연말정산에 사용할 금액
@@ -47,7 +47,7 @@ decimal calculatedHouseEtcLoan //(2012년 이후 차입분 15년 이상) 기타�
 
 decimal calculatedHouseOfferSavings//청약저축
 decimal calculatedHouseOfferTotalSavings//주택청약종합저축
-decimal calculatedHouseOfferLongtermSavings //장기주택마련저축
+
 decimal calculatedHouseWorkersSave//근로자주택마련저축
 
 //한도 금액들
@@ -62,7 +62,7 @@ decimal limit5000000
 decimal limit3000000
 decimal limit480000
 //본격적인 계산
-totalSalary = adc_wincome
+totalSalary = ads_exact.object.wincome[idx] 
 limit6000000 = 6000000
 limit10000000 = 10000000
 limit15000000 = 15000000
@@ -89,9 +89,8 @@ calculatedHouseEtcLoan = 0
 //매핑 
 houseRentLoanPrincipalRepaymentAmt_LoanOrganization = ads_incm_deduc.object.house_fund_repay[1]         //주택차입원리금상환-대출기간
 houseRentLoanPrincipalRepaymentAmt_Liver =  ads_incm_deduc.object.house_fund_repay_liver[1]         //주택차입원리금상환-거주자
-houseOfferSavings = ads_incm_deduc.object.house_fund_save[1]          //주택마련저축(청약저축)
-houseOfferTotalSavings =  ads_incm_deduc.object.house_fund_save2[1]         //주택마련저축(청약종합저축)
-houseOfferLongtermSavings = ads_incm_deduc.object.house_fund_save3[1]         //장기주택마련저축
+houseOfferSavings = ads_incm_deduc.object.house_10[1]          //주택마련저축(청약저축)
+houseOfferTotalSavings =  ads_incm_deduc.object.house_20[1]         //주택마련저축(청약종합저축)
 houseWorkersSave =  ads_incm_deduc.object.house_31[1] 
 houseMonthlyRentAmt = ads_incm_deduc.object.monthly_rent[1]               //월세
 houseLongtermLoanAmt15Under = ads_incm_deduc.object.house_fund_save_int[1]     //장기주택저당차입금 15년 미만
@@ -104,7 +103,7 @@ houseEtcLoan =  ads_incm_deduc.object.ETC_REPAY_LOAN[1] //기타대출
 
 //1. check sum(all) == 0 then return
 decimal inputTotalSum ;
-inputTotalSum  = houseRentLoanPrincipalRepaymentAmt_LoanOrganization + houseRentLoanPrincipalRepaymentAmt_Liver +    houseMonthlyRentAmt + houseLongtermLoanAmt15Under + houseLongtermLoanAmt15to29 + houseLongtermLoanAmt30Over + houseFixedInterestRateNonDeferredRepaymentLoan + houseEtcLoan + houseOfferSavings + houseOfferTotalSavings + houseOfferLongtermSavings + houseWorkersSave
+inputTotalSum  = houseRentLoanPrincipalRepaymentAmt_LoanOrganization + houseRentLoanPrincipalRepaymentAmt_Liver +    houseMonthlyRentAmt + houseLongtermLoanAmt15Under + houseLongtermLoanAmt15to29 + houseLongtermLoanAmt30Over + houseFixedInterestRateNonDeferredRepaymentLoan + houseEtcLoan + houseOfferSavings + houseOfferTotalSavings  + houseWorkersSave
 if  inputTotalSum = 0 then
   calculatedHouseRentLoanPrincipalRepaymentAmtLoanOrganization = 0
   calculatedHouseRentLoanPrincipalRepaymentAmtLiver = 0
@@ -141,7 +140,6 @@ if  houseRentLoanPrincipalRepaymentAmt_LoanOrganization > 0 and calculatedSumAmt
     calculatedHouseMonthlyRentAmt = 0
     calculatedHouseOfferSavings = 0
     calculatedHouseOfferTotalSavings = 0
-    calculatedHouseOfferLongtermSavings = 0
     calculatedHouseWorkersSave = 0
     calculatedHouseLongtermLoanAmt15Under = 0
     calculatedHouseLongtermLoanAmt15to29 = 0
@@ -155,22 +153,21 @@ end if
 //주택임차차입금 원리금 상환액 거주자 한도 계산
 if houseRentLoanPrincipalRepaymentAmt_Liver > 0 and calculatedSumAmt < maxLimitAmt then
   calculatedHouseRentLoanPrincipalRepaymentAmtLiver = min( truncate( houseRentLoanPrincipalRepaymentAmt_Liver * 0.4 ,0) , limit3000000)
-	if totalSalary <= 50000000 then
-		  if  calculatedSumAmt + calculatedHouseRentLoanPrincipalRepaymentAmtLiver > maxLimitAmt then
-		      calculatedHouseRentLoanPrincipalRepaymentAmtLiver = maxLimitAmt - calculatedSumAmt
-		      calculatedHouseMonthlyRentAmt = 0
-		      calculatedHouseOfferSavings = 0
-		      calculatedHouseOfferTotalSavings = 0
-		      calculatedHouseOfferLongtermSavings = 0
-		      calculatedHouseWorkersSave = 0
-		      calculatedHouseLongtermLoanAmt15Under = 0
-		      calculatedHouseLongtermLoanAmt15to29 = 0
-		      calculatedHouseLongtermLoanAmt30Over = 0 
-		      calculatedHouseFixedInterestRateNonDeferredRepaymentLoan = 0
-		      calculatedHouseEtcLoan = 0
-		  end if
-		  calculatedSumAmt = calculatedSumAmt + calculatedHouseRentLoanPrincipalRepaymentAmtLiver
-	end if		  
+  if totalSalary <= 50000000 then
+      if  calculatedSumAmt + calculatedHouseRentLoanPrincipalRepaymentAmtLiver > maxLimitAmt then
+          calculatedHouseRentLoanPrincipalRepaymentAmtLiver = maxLimitAmt - calculatedSumAmt
+          calculatedHouseMonthlyRentAmt = 0
+          calculatedHouseOfferSavings = 0
+          calculatedHouseOfferTotalSavings = 0
+          calculatedHouseWorkersSave = 0
+          calculatedHouseLongtermLoanAmt15Under = 0
+          calculatedHouseLongtermLoanAmt15to29 = 0
+          calculatedHouseLongtermLoanAmt30Over = 0 
+          calculatedHouseFixedInterestRateNonDeferredRepaymentLoan = 0
+          calculatedHouseEtcLoan = 0
+      end if
+      calculatedSumAmt = calculatedSumAmt + calculatedHouseRentLoanPrincipalRepaymentAmtLiver
+  end if      
 end if
 
 //월세한도 계산
@@ -184,7 +181,6 @@ if houseMonthlyRentAmt > 0 and calculatedSumAmt < maxLimitAmt then
       calculatedHouseMonthlyRentAmt = maxLimitAmt - calculatedSumAmt 
       calculatedHouseOfferSavings = 0
       calculatedHouseOfferTotalSavings = 0
-      calculatedHouseOfferLongtermSavings = 0
       calculatedHouseWorkersSave = 0
       calculatedHouseLongtermLoanAmt15Under = 0
       calculatedHouseLongtermLoanAmt15to29 = 0
@@ -204,7 +200,6 @@ if houseOfferSavings > 0 and calculatedSumAmt < maxLimitAmt then
   if  calculatedSumAmt + calculatedHouseOfferSavings > maxLimitAmt then
     calculatedHouseOfferSavings = maxLimitAmt - calculatedSumAmt
     calculatedHouseOfferTotalSavings = 0
-    calculatedHouseOfferLongtermSavings = 0 
     calculatedHouseWorkersSave = 0
     calculatedHouseLongtermLoanAmt15Under = 0
     calculatedHouseLongtermLoanAmt15to29 = 0
@@ -222,7 +217,6 @@ if houseOfferTotalSavings > 0 and calculatedSumAmt < maxLimitAmt then
   if  calculatedSumAmt + calculatedHouseOfferTotalSavings > maxLimitAmt then
 
     calculatedHouseOfferTotalSavings = maxLimitAmt - calculatedSumAmt
-    calculatedHouseOfferLongtermSavings = 0
     calculatedHouseWorkersSave = 0
     calculatedHouseLongtermLoanAmt15Under = 0
     calculatedHouseLongtermLoanAmt15to29 = 0
@@ -233,22 +227,6 @@ if houseOfferTotalSavings > 0 and calculatedSumAmt < maxLimitAmt then
   calculatedSumAmt =  calculatedSumAmt + calculatedHouseOfferTotalSavings
 end if
 
-//저축 마련 저축 소득공제 - 장기주택마련저축
-if houseOfferLongtermSavings > 0 and calculatedSumAmt < maxLimitAmt then
-  calculatedHouseOfferLongtermSavings = houseOfferLongtermSavings
-
-  if  calculatedSumAmt + calculatedHouseOfferLongtermSavings > maxLimitAmt then
-  
-    calculatedHouseOfferLongtermSavings = maxLimitAmt - calculatedSumAmt
-    calculatedHouseWorkersSave = 0
-    calculatedHouseLongtermLoanAmt15Under = 0
-    calculatedHouseLongtermLoanAmt15to29 = 0
-    calculatedHouseLongtermLoanAmt30Over = 0 
-    calculatedHouseFixedInterestRateNonDeferredRepaymentLoan = 0
-    calculatedHouseEtcLoan = 0
-  end if
-  calculatedSumAmt =  calculatedSumAmt + calculatedHouseOfferTotalSavings
-end if
 
 //저축 마련 저축 소득공제 - 근로자주택마련저축
 if houseWorkersSave > 0 and calculatedSumAmt < maxLimitAmt then
@@ -269,7 +247,7 @@ end if
 
 //(2011년 이전 차입분) 장기주택저당차입금이자상환액_15년미만 한도계산 
 if houseLongtermLoanAmt15Under > 0 and calculatedSumAmt < maxLimitAmt then
-  calculatedHouseLongtermLoanAmt15Under =	min( houseLongtermLoanAmt15Under , limit6000000 )
+  calculatedHouseLongtermLoanAmt15Under = min( houseLongtermLoanAmt15Under , limit6000000 )
 
   if  calculatedSumAmt + calculatedHouseLongtermLoanAmt15Under > maxLimitAmt then
 
@@ -281,7 +259,7 @@ if houseLongtermLoanAmt15Under > 0 and calculatedSumAmt < maxLimitAmt then
   end if
   calculatedSumAmt =  calculatedSumAmt + calculatedHouseLongtermLoanAmt15Under
 end if
-
+ 
 //(2011년 이전 차입분) 장기주택저당차입금이자상환액_15년~29년 한도계산 
 if houseLongtermLoanAmt15to29  > 0  and calculatedSumAmt < maxLimitAmt then
 
@@ -333,7 +311,6 @@ end if
 //결과 매핑 
 ads_exact.object.house_fund_save1_deduc[idx]  = wf_decimal_nvl(calculatedhouseOfferSavings)
 ads_exact.object.house_fund_save2_deduc[idx]  = wf_decimal_nvl(calculatedhouseOfferTotalSavings)
-ads_exact.object.house_fund_save3_deduc[idx]  = wf_decimal_nvl(houseOfferLongtermSavings)
 
 ads_exact.object.house_fund_repay_deduc[idx]  = wf_decimal_nvl(calculatedHouseRentLoanPrincipalRepaymentAmtLoanOrganization)
 ads_exact.object.house_fund_repay_liver_deduc[idx]  = wf_decimal_nvl(calculatedHouseRentLoanPrincipalRepaymentAmtLiver)
