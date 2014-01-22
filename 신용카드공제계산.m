@@ -34,16 +34,16 @@ long	finalDeductionAmt						//최종 공제금액 21
 
 
 //11 전통시장 사용분 공제액 
-traditionalMarketUseAmtOfDeductionAmt = traditionalMarketUseAmtOfDeductionAmt* 0.3	 
+traditionalMarketUseAmtOfDeductionAmt =round( traditionalMarketUseAmtOfDeductionAmt* 0.3	 ,0)
 
 //12 대중교통 이용분 공제액 
-publicTransportUseAmtOfDeductionAmt = publicTransportUseAmt * 0.3		 
+publicTransportUseAmtOfDeductionAmt =round( publicTransportUseAmt * 0.3		 ,0)
 
 //13 직불-선불카드, 현금영수증 사용분 공제액 
-debitAndPrepaidCardAndCashReceiptUsedAmtOfDeductionAmt = ( cashReceiptUsedAmt + debitAndPrepaidCardUsedAmt ) * 0.3 
+debitAndPrepaidCardAndCashReceiptUsedAmtOfDeductionAmt =round( ( cashReceiptUsedAmt + debitAndPrepaidCardUsedAmt ) * 0.3  ,0)
 
 //14 신용카드 사용분 공제액
-creditCardAmtUsedAmtOfDeductionAmt = creditCardAmtUsedAmt * 0.15 
+creditCardAmtUsedAmtOfDeductionAmt = round(creditCardAmtUsedAmt * 0.15 ,0)
 
 //15 공제제외금액 계산		deductionExclusive
 //15-1 총급여
@@ -96,5 +96,5 @@ publicTransportAdditionalDeducionAmt = min(1000000,min(minAmt16minus17minus19 , 
 //21 최종 공제금액
 finalDeductionAmt = generalDeductionAmt + tradtionalMarketAdditionalDeducionAmt + publicTransportAdditionalDeducionAmt
 
-return finalDeductionAmt
+return truncate( finalDeductionAmt,0)
 
