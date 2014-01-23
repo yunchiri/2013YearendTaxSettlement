@@ -58,6 +58,7 @@ long limit15000000
 long limit5000000 
 long limit3000000
 long limit480000
+long limit720000
 //본격적인 계산
 totalSalary = getFromDB('totalSalary')
 limit6000000 = 6000000
@@ -66,6 +67,7 @@ limit15000000 = 15000000
 limit5000000 = 5000000
 limit3000000 = 3000000
 limit480000 = 480000
+limit720000 = 720000
 maxLimitAmt = 3000000
 
 //변수 init
@@ -219,7 +221,7 @@ if( houseOfferTotalSavings > 0 && calculatedSumAmt < maxLimitAmt ){
 
 //저축 마련 저축 소득공제 - 근로자주택마련저축
 if( houseWorkersSave > 0 && calculatedSumAmt < maxLimitAmt ){
-	calculatedHouseWorkersSave = truncate( houseWorkersSave * 0.4 ,0)
+	calculatedHouseWorkersSave = min( truncate( houseWorkersSave * 0.4 ,0) , limit720000)
 
 	if ( calculatedSumAmt + calculatedHouseWorkersSave >= maxLimitAmt)
 	{

@@ -61,6 +61,8 @@ decimal limit15000000
 decimal limit5000000 
 decimal limit3000000
 decimal limit480000
+decimal limit720000
+
 //본격적인 계산
 totalSalary = ads_exact.object.wincome[idx] 
 limit6000000 = 6000000
@@ -69,6 +71,7 @@ limit15000000 = 15000000
 limit5000000 = 5000000
 limit3000000 = 3000000
 limit480000 = 480000
+limit720000 = 720000
 maxLimitAmt = 3000000
 
 
@@ -175,7 +178,7 @@ if houseMonthlyRentAmt > 0 and calculatedSumAmt < maxLimitAmt then
 
   if totalSalary <= 50000000 then
   
-    calculatedHouseMonthlyRentAmt = min(truncate( houseMonthlyRentAmt* 0.4 ,0), limit3000000)
+    calculatedHouseMonthlyRentAmt = min(truncate( houseMonthlyRentAmt* 0.5 ,0), limit3000000)
 
     if calculatedSumAmt + calculatedHouseMonthlyRentAmt > maxLimitAmt then
       calculatedHouseMonthlyRentAmt = maxLimitAmt - calculatedSumAmt 
@@ -230,7 +233,7 @@ end if
 
 //저축 마련 저축 소득공제 - 근로자주택마련저축
 if houseWorkersSave > 0 and calculatedSumAmt < maxLimitAmt then
-  calculatedHouseWorkersSave = truncate( houseWorkersSave * 0.4 ,0)
+  calculatedHouseWorkersSave = min( truncate( houseWorkersSave * 0.4 ,0) , limit720000)
 
   if calculatedSumAmt + calculatedHouseWorkersSave > maxLimitAmt then
 
